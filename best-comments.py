@@ -142,6 +142,14 @@ class SubredditStats(object):
         """Run stats and return the created Submission."""
         LOGGER.info('Analyzing subreddit: %s', self.subreddit)
 
+        produce_output = None
+        if action == 'csv':
+            produce_output = self.publish_csv
+        elif action == 'feed':
+            produce_output = self.publish_feed
+        else:
+            raise ValueError('Invalid action')
+
         self.fetch_recent_submissions()
         self.fetch_comments()
 
@@ -151,12 +159,7 @@ class SubredditStats(object):
 
         self.process_comments(score_limit)
 
-        if action == 'csv':
-            return self.publish_csv()
-        if action == 'feed':
-            return self.publish_feed()
-        else:
-            raise ValueError('Invalid action')
+        produce_output()
 
 
 def main():
