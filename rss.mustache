@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+  <channel>
+    <title>{{title}}</title>
+    <link>{{url}}</link>
+    <description>{{description}}</description>
+    <pubDate>{{rss2update}}</pubDate>
+    {{#entries}}
+    <item>
+      <title>{{title}}</title>
+      <link>{{url}}</link>
+      <description>{{text}}</description>
+      {{#categories}}
+        <category>{{name}}</category>
+      {{/categories}}
+    </item>
+    {{/entries}}
+  </channel>
+</rss>
