@@ -113,14 +113,19 @@ class SubredditStats(object):
     def publish_feed(self):
         """Generate an RSS feed"""
         data = {
-            'title': 'Best comment of %s' % self.subreddit.display_name,
+            'title': 'Best comments of %s' % self.subreddit.path,
             'url': self.reddit.config.reddit_url + self.subreddit.path,
-            'description': 'Best comments',
+            'description': 'Best comments from %s' % self.subreddit.path,
             'rss2update': formatdate(),
             'entries': [
-                {'title':'[%d] %s on %s' % (comment.score, comment.author, comment.submission.title),
-                 'url': self.reddit.config.reddit_url + comment.permalink(fast=True),
-                 'text': comment.body_html
+                {
+                    'title':'[%d] %s on %s' %
+                            (comment.score, comment.author, comment.submission.title),
+                    'url': self.reddit.config.reddit_url + comment.permalink(fast=True),
+                    'text': comment.body_html,
+                    'author': comment.author,
+                    'categories': [comment.subreddit.display_name],
+                    'rss2update': formatdate(comment.created_utc)
                 }
                 for comment in self.comments
             ]
