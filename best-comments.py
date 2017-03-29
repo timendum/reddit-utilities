@@ -11,7 +11,7 @@ from email.utils import formatdate
 
 HOUR_IN_SECONDS = 60 * 60
 DAY_IN_SECONDS = 60 * 60 * 24
-AGENT = 'python:reddit-stats:0.1 (by /u/timendum)'
+AGENT = 'python:best-comments:0.1 (by /u/timendum)'
 
 LOGGER = logging.getLogger(__file__)
 
@@ -172,7 +172,7 @@ def main():
     parser.add_argument(
         'action', type=str, help='The action to be performed: mail or csv')
     parser.add_argument(
-        '--days', type=int, default=2, help='The days to be extracted')
+        '--days', type=int, default=1, help='The days to be extracted')
     parser.add_argument(
         '--score',
         type=int,
