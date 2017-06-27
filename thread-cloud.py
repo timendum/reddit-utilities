@@ -45,7 +45,7 @@ def to_csv(comments):
     writer = csv.writer(f, dialect=CustomDialect)
     writer.writerow([
         'id', 'score', 'author', 'link_id', 'created_utc', 'controversiality',
-        'edited', 'top_level', 'stickied', 'distinguished', 'gilded', 'body'
+        'edited', 'top_level', 'stickied', 'distinguished', 'gilded', 'parent', 'body'
     ])
     for c in comments:
         writer.writerow([
@@ -53,7 +53,9 @@ def to_csv(comments):
             datetime.utcfromtimestamp(c.created_utc), c.controversiality,
             datetime.utcfromtimestamp(c.edited)
             if c.edited else c.edited, (c.parent_id == c.link_id), c.stickied,
-            c.distinguished, c.gilded, c.body
+            c.distinguished, c.gilded,
+            '' if c.parent_id == c.link_id  else c.parent_id[3:],
+            c.body
         ])
     output = f.getvalue()
     f.close()
@@ -102,7 +104,7 @@ def main():
     if not options.filename:
         options.filename = default_filename % options.t3
 
-    with open(options.filename, 'w') as fileout:
+    with open(options.filename, 'w', encoding='utf8') as fileout:
         fileout.write(output)
     return 0
 
