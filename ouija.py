@@ -22,7 +22,7 @@ class Ouija(object):
         self.todo = None
         if ok_id:
             self.ok = reddit.comment(id=ok_id)
-        if ok_id:
+        if todo_id:
             self.todo = reddit.comment(id=todo_id)
 
     def fetch_comments(self):
@@ -50,7 +50,7 @@ class Ouija(object):
                     for sub in others:
                         opens.append(comment.body + sub)
                     if not others:
-                        opens.append('[%s](%s) - %d' % (comment.body, comment.permalink(fast=True)), comment.score)
+                        opens.append('[%s](%s) - %d' % (comment.body, comment.permalink(fast=True), comment.score))
             else:
                 LOGGER.debug('Skipped %s', comment.body)
         return opens, closeds
