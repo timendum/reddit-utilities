@@ -1,4 +1,5 @@
-# pylint: disable=C0111,W0621,C0103
+"""Produce a summery for AskOuija thread"""
+# pylint: disable=C0103
 import logging
 import datetime
 from sys import argv
@@ -27,11 +28,13 @@ class Ouija(object):
             self.todo = reddit.comment(id=todo_id)
 
     def fetch_comments(self):
+        """Return the comment of the post"""
         self.post.comment_sort = 'top'
         self.post.comments.replace_more(limit=None)
         return self.post.comments
 
     def find_answers(self, parent):
+        """Given a comment return a list of open and closed replies"""
         closeds = []
         opens = []
         if isinstance(parent, CommentForest):
@@ -49,6 +52,7 @@ class Ouija(object):
                 for sub in oks:
                     closeds.append(comment.body + sub)
                 if not oks:
+                    # search for open answers only if there are no closed answers
                     for sub in others:
                         opens.append(comment.body + sub)
                     if not others:
@@ -59,6 +63,11 @@ class Ouija(object):
         return opens, closeds
 
     def oujas(self):
+        """Return a list of [ok, todo]
+
+        ok   = list of [question, answer] with ending (Goodbye)
+        todo = list of [question, answer] without ending (Goodbye)
+        """
         ok, todo = [], []
         for comment in self.fetch_comments():
             if comment.stickied:
@@ -77,6 +86,7 @@ class Ouija(object):
         return ok, todo
 
     def text(self):
+        """Produce two string, one for closed and one for open questions."""
         text = ''
         ora = datetime.datetime.now().strftime('%H:%M')
         text += 'I Risultati alle %s.  \n%s = Finito - numero dei voti\n\n' % (ora, END)
@@ -97,6 +107,7 @@ class Ouija(object):
         return a, b
 
     def output(self):
+        """Write files or edit comments"""
         ok, todo = self.text()
         if self.ok:
             self.ok.edit(ok)
@@ -110,6 +121,7 @@ class Ouija(object):
                 f.write(todo)
 
     def permalink(self, comment):
+        """Produce a shorter permalink"""
         return '/r/{}/comments/{}//{}'.format(self.post.subreddit.display_name,
                                               self.post.id, comment.id)
 
