@@ -47,17 +47,18 @@ class Ouija(object):
                     closeds.append('[%s](%s) - %d' % (END, self.permalink(comment), comment.score))
 
         for comment in parent.replies:
-            if len(comment.body.strip()) == 1:
+            body = comment.body.strip()
+            if len(body) == 1:
                 others, oks = self.find_answers(comment)
                 for sub in oks:
-                    closeds.append(comment.body + sub)
+                    closeds.append(body + sub)
                 if not oks:
                     # search for open answers only if there are no closed answers
                     for sub in others:
-                        opens.append(comment.body + sub)
+                        opens.append(body + sub)
                     if not others:
                         if comment.score > 0:
-                            opens.append('[%s](%s)' % (comment.body, self.permalink(comment)))
+                            opens.append('[%s](%s)' % (body, self.permalink(comment)))
             else:
                 LOGGER.debug('Skipped %s', comment.body)
         return opens, closeds
