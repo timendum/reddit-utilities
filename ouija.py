@@ -44,7 +44,7 @@ class Ouija(object):
             if 'goodbye' in comment.body.lower() or \
                'arrivederci' in comment.body.lower():
                 if comment.score > 0:
-                    closeds.append('[%s](%s) - %d' % (END, self.permalink(comment), comment.score))
+                    closeds.append('[%s?context=99](%s) - %d' % (END, self.permalink(comment), comment.score))
 
         for comment in parent.replies:
             body = comment.body.strip()
