@@ -30,6 +30,7 @@ class Ouija(object):
         if isinstance(parent, CommentForest):
             parent.replace_more(limit=None)
         for comment in parent.replies:
+            # closing found
             if 'goodbye' in comment.body.lower() or \
                'arrivederci' in comment.body.lower():
                 closeds.append('[%s](%s) - %d' % (END, comment.permalink(fast=True), comment.score))
