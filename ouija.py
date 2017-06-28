@@ -63,6 +63,8 @@ class Ouija(object):
             else:
                 if opens:
                     todo.append([question, opens])
+        ok.sort(key=lambda a: int(a.split(' - ')[-1]))
+        todo.sort(key=len)
         return ok, todo
 
     def text(self):
