@@ -67,12 +67,12 @@ class Ouija(object):
             question = question.split('\n\n')[0]
             opens, closeds = self.find_answers(comment)
             if closeds:
+                closeds.sort(key=lambda a: int(a.split(' - ')[-1]), reverse=True)
                 ok.append([question, closeds])
             else:
                 if opens:
+                    opens.sort(key=len, reverse=True)
                     todo.append([question, opens])
-        ok[1].sort(key=lambda a: int(a.split(' - ')[-1]))
-        todo[1].sort(key=len)
         return ok, todo
 
     def text(self):
