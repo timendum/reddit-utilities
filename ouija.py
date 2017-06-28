@@ -39,7 +39,8 @@ class Ouija(object):
             # closing found
             if 'goodbye' in comment.body.lower() or \
                'arrivederci' in comment.body.lower():
-                closeds.append('[%s](%s) - %d' % (END, comment.permalink(fast=True), comment.score))
+                if comment.score > 0:
+                    closeds.append('[%s](%s) - %d' % (END, self.permalink(comment), comment.score))
 
         for comment in parent.replies:
             if len(comment.body.strip()) == 1:
@@ -50,7 +51,8 @@ class Ouija(object):
                     for sub in others:
                         opens.append(comment.body + sub)
                     if not others:
-                        opens.append('[%s](%s) - %d' % (comment.body, comment.permalink(fast=True), comment.score))
+                        if comment.score > 0:
+                            opens.append('[%s](%s)' % (comment.body, self.permalink(comment)))
             else:
                 LOGGER.debug('Skipped %s', comment.body)
         return opens, closeds
@@ -106,6 +108,8 @@ class Ouija(object):
             with open('todos.txt', 'w') as f:
                 f.write(todo)
 
+    def permalink(self, comment):
+        return '/r/{}/comments/{}//{}'.format(self.post.subreddit.display_name, self.post.id, comment.id)
 
 if __name__ == "__main__":
     if len(argv) < 2:
