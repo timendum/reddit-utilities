@@ -76,7 +76,7 @@ class Ouija(object):
                 # skip stickied comment
                 continue
             question = comment.body
-            question = question.split('\n\n')[0]
+            question = question.split('\n')[0]
             opens, closeds = self.find_answers(comment)
             if closeds:
                 closeds.sort(key=lambda a: int(a.split(' - ')[-1]), reverse=True)
