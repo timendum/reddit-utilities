@@ -14,10 +14,16 @@ END = '‡'
 class Ouija(object):
     """Contain all the functionality of the subreddit_stats command."""
 
-    def __init__(self, post_id):
+    def __init__(self, post_id, ok_id=None, todo_id=None):
         """Initialize."""
         reddit = Reddit(check_for_updates=False)
         self.post = reddit.submission(id=post_id)
+        self.ok = None
+        self.todo = None
+        if ok_id:
+            self.ok = reddit.comment(id=ok_id)
+        if ok_id:
+            self.todo = reddit.comment(id=todo_id)
 
     def fetch_comments(self):
         self.post.comment_sort = 'top'
@@ -87,17 +93,24 @@ class Ouija(object):
         b = text
         return a, b
 
-    def to_file(self):
-        a, b = self.text()
-        with open('oks.txt', 'w') as f:
-            f.write(a)
-        with open('todos.txt', 'w') as f:
-            f.write(b)
+    def output(self):
+        ok, todo = self.text()
+        if self.ok:
+            self.ok.edit(ok)
+        else:
+            with open('oks.txt', 'w') as f:
+                f.write(ok)
+        if self.todo:
+            self.todo.edit(todo)
+        else:
+            with open('todos.txt', 'w') as f:
+                f.write(todo)
 
 
 if __name__ == "__main__":
     if len(argv) < 2:
         print('Invoke the program with post_id')
     else:
-        o = Ouija(argv[1])
-        o.to_file()
+        args = argv + [None, None]
+        o = Ouija(*argv[1:])
+        o.output()
