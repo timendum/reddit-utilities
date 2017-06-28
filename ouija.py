@@ -50,7 +50,7 @@ class Ouija(object):
                     for sub in others:
                         opens.append(comment.body + sub)
                     if not others:
-                        opens.append('[%s](%s)' % (comment.body, comment.permalink(fast=True)))
+                        opens.append('[%s](%s) - %d' % (comment.body, comment.permalink(fast=True)), comment.score)
             else:
                 LOGGER.debug('Skipped %s', comment.body)
         return opens, closeds
