@@ -12,6 +12,8 @@ LOGGER = logging.getLogger(__file__)
 
 END = '‡'
 
+# Print open ansers even if there are closed in the same question
+TODO_ALWAYS = True
 
 class Ouija(object):
     """Contain all the functionality of the subreddit_stats command."""
@@ -53,8 +55,7 @@ class Ouija(object):
                 others, oks = self.find_answers(comment)
                 for sub in oks:
                     closeds.append(body + sub)
-                if not oks:
-                    # search for open answers only if there are no closed answers
+                if not oks or TODO_ALWAYS:
                     for sub in others:
                         opens.append(body + sub)
                     if not others:
@@ -81,7 +82,7 @@ class Ouija(object):
             if closeds:
                 closeds.sort(key=lambda a: int(a.split(' - ')[-1]), reverse=True)
                 ok.append([question, closeds])
-            else:
+            if not closeds or TODO_ALWAYS:
                 if opens:
                     opens.sort(key=len, reverse=True)
                     todo.append([question, opens])
