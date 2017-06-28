@@ -11,6 +11,7 @@ LOGGER = logging.getLogger(__file__)
 
 END = '‡'
 
+
 class Ouija(object):
     """Contain all the functionality of the subreddit_stats command."""
 
@@ -109,7 +110,9 @@ class Ouija(object):
                 f.write(todo)
 
     def permalink(self, comment):
-        return '/r/{}/comments/{}//{}'.format(self.post.subreddit.display_name, self.post.id, comment.id)
+        return '/r/{}/comments/{}//{}'.format(self.post.subreddit.display_name,
+                                              self.post.id, comment.id)
+
 
 if __name__ == "__main__":
     if len(argv) < 2:
