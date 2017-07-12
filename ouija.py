@@ -58,7 +58,8 @@ class Ouija(object):
                 if not oks or TODO_ALWAYS:
                     for sub in others:
                         opens.append(body + sub)
-                    if not others:
+                    # no descendant and no closed -> last char of an open answer
+                    if not others and not oks:
                         if comment.score > 0:
                             opens.append('[%s](%s)' % (body, self.permalink(comment)))
             else:
