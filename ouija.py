@@ -119,9 +119,9 @@ class Ouija(object):
             self.todo.edit(todo)
 
         if not self.ok or not self.todo:
-            with open('oks.txt', 'w') as f:
+            with open('oks.txt', 'w', encoding='utf8') as f:
                 f.write(ok)
-            with open('todos.txt', 'w') as f:
+            with open('todos.txt', 'w', encoding='utf8') as f:
                 f.write(todo)
 
     def permalink(self, comment):
