@@ -115,12 +115,12 @@ class Ouija(object):
         ok, todo = self.text()
         if self.ok:
             self.ok.edit(ok)
-        else:
-            with open('oks.txt', 'w') as f:
-                f.write(ok)
         if self.todo:
             self.todo.edit(todo)
-        else:
+
+        if not self.ok or not self.todo:
+            with open('oks.txt', 'w') as f:
+                f.write(ok)
             with open('todos.txt', 'w') as f:
                 f.write(todo)
 
