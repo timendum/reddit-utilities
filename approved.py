@@ -20,7 +20,7 @@ class CustomDialect(csv.Dialect):
 def process(subreddit: str) -> str:
     reddit = praw.Reddit(check_for_updates=False, user_agent=AGENT)
     subr = reddit.subreddit(subreddit)
-    contributors = subr.contributor()
+    contributors = subr.contributor(limit=None)
 
     filename = '%s-approved.csv' % subreddit
     with open(filename, 'w', newline='', encoding='utf-8') as f:
