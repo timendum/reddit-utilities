@@ -18,6 +18,7 @@ class CustomDialect(csv.Dialect):
     quoting = csv.QUOTE_MINIMAL
 
 def process(subreddit: str) -> str:
+    """Read users and add info to the csv"""
     reddit = praw.Reddit(check_for_updates=False, user_agent=AGENT)
     subr = reddit.subreddit(subreddit)
     contributors = subr.contributor(limit=None)
