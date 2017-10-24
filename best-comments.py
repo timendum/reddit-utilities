@@ -1,13 +1,14 @@
 """Find best comment on reddit."""
+import calendar
 import csv
 import logging
-import calendar
 import time
 from argparse import ArgumentParser as arg_parser
+from email.utils import formatdate
 from os import path
+
 import pystache
 from praw import Reddit
-from email.utils import formatdate
 
 HOUR_IN_SECONDS = 60 * 60
 DAY_IN_SECONDS = 60 * 60 * 24
