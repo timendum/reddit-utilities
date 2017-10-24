@@ -121,7 +121,7 @@ class SubredditStats(object):
                 {
                     'title':'[%d] %s on %s' %
                             (comment.score, comment.author, comment.submission.title),
-                    'url': self.reddit.config.reddit_url + comment.permalink(fast=True),
+                    'url': self.reddit.config.reddit_url + comment.permalink,
                     'text': comment.body_html,
                     'author': comment.author,
                     'categories': [comment.subreddit.display_name],
@@ -148,7 +148,7 @@ class SubredditStats(object):
         elif action == 'feed':
             produce_output = self.publish_feed
         else:
-            raise ValueError('Invalid action')
+            raise ValueError('Invalid action: %s' % action)
 
         self.fetch_recent_submissions()
         self.fetch_comments()
