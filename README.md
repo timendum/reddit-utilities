@@ -4,17 +4,17 @@
 A set of tools made for Reddit
 
 ## Requirements
-- A python 3.5 or higher capable machine
-- ```praw```
+
+- A python 3.5 or higher
 
 ## How to install ?
 1. Clone this repo in your web folder (ex: /var/www).
-2. ```pip install praw```
+2. ```pip install -r requirements.txt```
 3. run it via ```python file.py```
 
 ## License
 
-Copyright (c) 2017 Timendum
+Copyright (c) 2019 Timendum
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
