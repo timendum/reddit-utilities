@@ -58,3 +58,4 @@ nosetests.xml
 *.csv
 *.xml
 praw.ini
+reddit.db
