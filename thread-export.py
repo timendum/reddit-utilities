@@ -25,7 +25,7 @@ logger = logging.getLogger(__file__)
 def get_comments(submission_id):
     reddit = Reddit(check_for_updates=False, user_agent=AGENT)
     submission = reddit.submission(id=submission_id)
-    more_comments = submission.comments.replace_more()
+    more_comments = submission.comments.replace_more(limit=None)
     if more_comments:
         skipped_comments = sum(x.count for x in more_comments)
         logger.debug('Skipped %d MoreComments (%d comments)',
