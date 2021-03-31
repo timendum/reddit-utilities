@@ -51,7 +51,7 @@ Aggiornato: {}""".format(
             ),
         )
 
-    def italiano(self, multiname):
+    def italiano(self, multiname, multiname2):
         wcontent = self.wikipage.content_md
         wcontent = wcontent.split(SPLIT_TEXT)[0]
         multi = self._reddit.multireddit(self._reddit.user.me().name, multiname)
@@ -61,6 +61,18 @@ Aggiornato: {}""".format(
             subreddits=subs,
             visibility="public",
             description_md="""Subreddit in italiano, escluso r/italy
+        
+Aggiornato: {}""".format(
+                datetime.date.today().isoformat()
+            ),
+        )
+        multi = self._reddit.multireddit(self._reddit.user.me().name, multiname2)
+        subs.append('italy')
+        LOGGER.info("Updating %s with %s", multi, subs)
+        multi.update(
+            subreddits=subs,
+            visibility="public",
+            description_md="""Subreddit in italiano
         
 Aggiornato: {}""".format(
                 datetime.date.today().isoformat()
@@ -93,7 +105,7 @@ def main():
     wikipage = reddit.subreddit("italy").wiki["sub_italiani"]
     mu = MultiredditUpdate(wikipage, reddit)
     mu.regional("locali")
-    mu.italiano("italiannoitaly")
+    mu.italiano("italiannoitaly", "italian")
 
 
 if __name__ == "__main__":
