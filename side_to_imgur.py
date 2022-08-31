@@ -68,3 +68,7 @@ def upload_to_imgur(images):
 def main():
     images = find_image_urls("italy")
     upload_to_imgur(images)
+
+
+if __name__ == "__main__":
+    main()
