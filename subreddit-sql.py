@@ -94,7 +94,7 @@ CREATE TABLE IF NOT EXISTS comments_awards(
 
         LOGGER.debug("Fetching submissions newer than %s days", days_old)
         min_date = datetime.utcnow().timestamp() - SECONDS_IN_DAY * days_old
-        for submission in self.subreddit.new(limit=3):
+        for submission in self.subreddit.new(limit=None):
             if submission.created_utc <= min_date:
                 continue
             self.submissions.append(submission)
