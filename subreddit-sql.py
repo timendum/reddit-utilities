@@ -176,7 +176,7 @@ CREATE TABLE IF NOT EXISTS comments_awards(
             if more_comments:
                 skipped_comments = sum(x.count for x in more_comments)
                 LOGGER.info(
-                    "Skipped %d MoreComments (%d comments)", len(more_comments), skipped_comments
+                    "Skipped %d MoreComments (%d comments) on %s", len(more_comments), skipped_comments, submission
                 )
 
             LOGGER.debug(
