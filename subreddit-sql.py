@@ -172,11 +172,14 @@ CREATE TABLE IF NOT EXISTS comments_awards(
                 continue
             submission.comment_sort = "top"
 
-            more_comments = submission.comments.replace_more()
+            more_comments = submission.comments.replace_more(limit=None)
             if more_comments:
                 skipped_comments = sum(x.count for x in more_comments)
                 LOGGER.info(
-                    "Skipped %d MoreComments (%d comments) on %s", len(more_comments), skipped_comments, submission
+                    "Skipped %d MoreComments (%d comments) on %s",
+                    len(more_comments),
+                    skipped_comments,
+                    submission,
                 )
 
             LOGGER.debug(
