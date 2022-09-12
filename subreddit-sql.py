@@ -1,4 +1,4 @@
-"""Utility to dump latest thread in a subreddit."""
+"""Utility to save submissions, comments and award from a subreddit into a sqlite database and keep it updated."""
 from argparse import ArgumentParser as arg_parser
 from datetime import datetime
 import sqlite3
@@ -289,8 +289,8 @@ CREATE TABLE IF NOT EXISTS comments_awards(
         max_date = min_date + SECONDS_IN_DAY * days_old
         cur = self.con.cursor()
         res = cur.execute(
-            "SELECT id from submissions where created_utc BETWEEN ? AND ? AND last_update BETWEEN ? AND ?",
-            (min_date, max_date, min_date, max_date),
+            "SELECT id from submissions where last_update BETWEEN ? AND ?",
+            (min_date, max_date),
         )
         for row in res:
             self.submissions.append(self.reddit.submission(id=row[0]))
