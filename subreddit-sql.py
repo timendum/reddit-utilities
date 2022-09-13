@@ -64,6 +64,7 @@ CREATE TABLE IF NOT EXISTS comments(
     author TEXT,
     submission_id TEXT,
     created_utc INTEGER,
+    parent_id TEXT,
     body TEXT,
     distinguished BOOLEAN,
     removed BOOLEAN,
@@ -203,6 +204,7 @@ CREATE TABLE IF NOT EXISTS comments_awards(
                     c.author.name if c.author else "[deleted]",
                     c.link_id[3:],
                     c.created_utc,
+                    c.parent_id
                     c.body,
                     c.distinguished,
                     c.removed,
@@ -226,12 +228,13 @@ CREATE TABLE IF NOT EXISTS comments_awards(
                 )
         self.con.executemany(
             """INSERT INTO comments
-    (id, score, author, submission_id, created_utc, body, distinguished, removed, collapsed,
-    locked, last_update)
-    VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    (id, score, author, submission_id, created_utc, parent_id, body, distinguished, removed,
+    collapsed,  locked, last_update)
+    VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     ON CONFLICT(id) DO UPDATE SET
     score=excluded.score, distinguished=excluded.distinguished, removed=excluded.removed,
-    collapsed=excluded.collapsed, locked=excluded.locked, last_update=excluded.last_update""",
+    collapsed=excluded.collapsed, locked=excluded.locked, last_update=excluded.last_update,
+    parent_id=excluded.parent_id""",
             dcomments,
         )
         if dawards:
