@@ -204,7 +204,7 @@ CREATE TABLE IF NOT EXISTS comments_awards(
                     c.author.name if c.author else "[deleted]",
                     c.link_id[3:],
                     c.created_utc,
-                    c.parent_id
+                    c.parent_id,
                     c.body,
                     c.distinguished,
                     c.removed,
