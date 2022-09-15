@@ -84,6 +84,14 @@ CREATE TABLE IF NOT EXISTS comments_awards(
     coin_price INTEGER,
     last_update NOT NULL)"""
         )
+        self.con.execute(
+            """
+CREATE TABLE IF NOT EXISTS traffics(
+    day INTEGER PRIMARY KEY,
+    pageviews INTEGER,
+    uniques INTEGER,
+    new_members INTEGER)"""
+        )
         self.con.commit()
 
     def fetch_recent_submissions(self, days_old: int) -> None:
@@ -99,6 +107,28 @@ CREATE TABLE IF NOT EXISTS comments_awards(
             if submission.created_utc <= min_date:
                 continue
             self.submissions.append(submission)
+
+    def fetch_recent_traffics(self, days_old: int) -> None:
+        """Fetch traffics stats in subreddit with boundaries.
+
+        :param days_old: The number of days to include
+
+        """
+
+        LOGGER.debug("Fetching traffic newer than %s days", days_old)
+        traffic = self.subreddit.traffic()["day"]
+        timelimit = int(datetime.now().timestamp()) - days_old * 60 * 60 * 24
+        self.traffic = [row for row in traffic if row[0] > timelimit]
+
+    def process_traffics(self) -> None:
+        """Write submissions to sql."""
+        LOGGER.debug("Processing %d traffic rows", len(self.traffic))
+        self.con.executemany(
+            """INSERT OR REPLACE INTO traffics
+(day, pageviews, uniques, new_members) VALUES(?, ?, ?, ?)""",
+            self.traffic,
+        )
+        self.con.commit()
 
     def process_submissions(self) -> None:
         """Write submissions file."""
@@ -263,6 +293,11 @@ CREATE TABLE IF NOT EXISTS comments_awards(
                 LOGGER.warning("No comments were found.")
             else:
                 self.process_comments()
+        self.fetch_recent_traffics(days_old)
+        if self.traffic:
+            self.process_traffics()
+        else:
+            LOGGER.warning("No traffic were found.")
         # REFRESH
         self.submissions = []
         self.comments = []
