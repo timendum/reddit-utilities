@@ -303,12 +303,12 @@ CREATE TABLE IF NOT EXISTS traffics(
         self.comments = []
         self.fetch_submissions_to_refresh(refresh_old, days_old)
         if not self.submissions:
-            LOGGER.warning("No submissions to refresh were found.")
+            LOGGER.info("No submissions to refresh were found.")
         else:
             self.process_submissions()
             self.fetch_comments_from_submissions()
             if not self.comments:
-                LOGGER.warning("No comments were found.")
+                LOGGER.info("No comments were found.")
             else:
                 self.process_comments()
 
