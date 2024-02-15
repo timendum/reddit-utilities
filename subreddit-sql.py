@@ -1,4 +1,4 @@
-"""Utility to save submissions, comments and award from a subreddit into a sqlite database and keep it updated."""
+"""Utility to save submissions, comments and awards from a subreddit into a sqlite database and keep it updated."""
 from argparse import ArgumentParser as arg_parser
 from datetime import datetime
 import sqlite3
@@ -14,6 +14,8 @@ class SubredditDump(object):
     def __init__(self, subreddit):
         """Initialize the SubredditStats instance with config options."""
         self.reddit = Reddit(check_for_updates=False)
+        if not self.reddit.user.me():
+            print(self.reddit.auth.url(scopes=["read", "identity"], state=""))
         self.subreddit = self.reddit.subreddit(subreddit)
         self.con = sqlite3.connect(f"{subreddit}.db")
         self._init_sql()
@@ -104,6 +106,7 @@ CREATE TABLE IF NOT EXISTS traffics(
         LOGGER.debug("Fetching submissions newer than %s days", days_old)
         min_date = datetime.utcnow().timestamp() - SECONDS_IN_DAY * days_old
         for submission in self.subreddit.new(limit=None):
+            submission.comment_sort = "top"
             if submission.created_utc <= min_date:
                 continue
             self.submissions.append(submission)
@@ -201,7 +204,6 @@ CREATE TABLE IF NOT EXISTS traffics(
         for index, submission in enumerate(self.submissions):
             if submission.num_comments == 0:
                 continue
-            submission.comment_sort = "top"
 
             more_comments = submission.comments.replace_more(limit=None)
             if more_comments:
@@ -321,7 +323,9 @@ CREATE TABLE IF NOT EXISTS traffics(
         """
 
         LOGGER.debug(
-            "Fetching submissions between %d and %d days old", refresh_old, refresh_old - days_old
+            "Fetching submissions between %d and %d days old",
+            refresh_old,
+            refresh_old - days_old,
         )
         min_date = datetime.utcnow().timestamp() - refresh_old * SECONDS_IN_DAY
         max_date = min_date + SECONDS_IN_DAY * days_old
@@ -340,7 +344,9 @@ def main() -> int:
     parser.add_argument("subreddit", type=str, help="The subreddit to be analyzed")
     parser.add_argument("days_old", type=int, help="Days to be fetched and refreshed")
     parser.add_argument("refresh_old", type=int, help="Update contents older than")
-    parser.add_argument("-v", "--verbose", action="count", default=0, help="Verbose level")
+    parser.add_argument(
+        "-v", "--verbose", action="count", default=0, help="Verbose level"
+    )
 
     options = parser.parse_args()
 
