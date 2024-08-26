@@ -1,3 +1,9 @@
+# /// script
+# requires-python = ">=3.10"
+# dependencies = [
+#     "praw<8",
+# ]
+# ///
 from argparse import ArgumentParser as arg_parser
 import logging
 import sqlite3
