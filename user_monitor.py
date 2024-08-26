@@ -35,6 +35,7 @@ def init_db() -> None:
         username VARCHAR(20) NOT NULL,
         subreddit VARCHAR(30),
         target VARCHAR(10),
+        post VARCHAR(10),
         created_utc INTEGER,
         PRIMARY KEY (id)
         );
@@ -78,13 +79,15 @@ def download_removed(sub: praw.reddit.Subreddit, conn: sqlite3.Connection) -> li
     actions = []
     params = {"before": get_last(conn, "removed", sub.display_name)}
     for action in sub.mod.log(action="addremovalreason", limit=1001, params=params):
+        target = next(sub._reddit.info(fullnames=[action.target_fullname]))
         actions.append(
             (
                 action.id,
                 action.target_author,
                 action.subreddit,
                 action.target_fullname,
-                action.created_utc,
+                getattr(target, 'link_id', target.fullname),
+                target.created_utc,
             )
         )
     return actions
@@ -104,7 +107,7 @@ def main(subreddits: list[str]) -> None:
         conn.executemany("insert or replace into banned values (?,?,?,?,?)", actions)
         actions = download_removed(rsubreddit, conn)
         LOGGER.debug("Removed %s", actions)
-        conn.executemany("insert or replace into removed values (?,?,?,?,?)", actions)
+        conn.executemany("insert or replace into removed values (?,?,?,?,?,?)", actions)
         conn.commit()
         LOGGER.debug("Added %d", len(actions))
     conn.close()
