@@ -22,7 +22,7 @@ class MultiredditUpdate(object):
         """Initialize"""
         self.wikipage = wikipage
         self._reddit = reddit
-        self._created_limit = datetime.datetime.utcnow().timestamp() - ACTIVE_UTC
+        self._created_limit = datetime.datetime.now(datetime.UTC).timestamp() - ACTIVE_UTC
 
     def _find_and_filter(self, wcontent):
         subs = re.findall(r"r/[0-9A-Za-z_]+", wcontent)

@@ -1,6 +1,6 @@
 """Utility to save submissions, comments and awards from a subreddit into a sqlite database and keep it updated."""
 from argparse import ArgumentParser as arg_parser
-from datetime import datetime
+from datetime import datetime, UTC
 import sqlite3
 import logging
 from praw import Reddit
@@ -21,7 +21,7 @@ class SubredditDump(object):
         self._init_sql()
         self.submissions = []
         self.comments = []
-        self._now = int(datetime.utcnow().timestamp())
+        self._now = int(datetime.now(UTC).timestamp())
 
     def _init_sql(self) -> None:
         self.con.execute(
@@ -104,7 +104,7 @@ CREATE TABLE IF NOT EXISTS traffics(
         """
 
         LOGGER.debug("Fetching submissions newer than %s days", days_old)
-        min_date = datetime.utcnow().timestamp() - SECONDS_IN_DAY * days_old
+        min_date = datetime.now(UTC).timestamp() - SECONDS_IN_DAY * days_old
         for submission in self.subreddit.new(limit=None):
             submission.comment_sort = "top"
             if submission.created_utc <= min_date:
@@ -327,7 +327,7 @@ CREATE TABLE IF NOT EXISTS traffics(
             refresh_old,
             refresh_old - days_old,
         )
-        min_date = datetime.utcnow().timestamp() - refresh_old * SECONDS_IN_DAY
+        min_date = datetime.now(UTC).timestamp() - refresh_old * SECONDS_IN_DAY
         max_date = min_date + SECONDS_IN_DAY * days_old
         cur = self.con.cursor()
         res = cur.execute(
