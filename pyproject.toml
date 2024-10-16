@@ -1,0 +1,11 @@
+[project]
+name = "reddit-utilities"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = ["praw>=7.6.0"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
