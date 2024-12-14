@@ -295,11 +295,11 @@ CREATE TABLE IF NOT EXISTS traffics(
                 LOGGER.warning("No comments were found.")
             else:
                 self.process_comments()
-        self.fetch_recent_traffics(days_old)
-        if self.traffic:
-            self.process_traffics()
-        else:
-            LOGGER.warning("No traffic were found.")
+        #self.fetch_recent_traffics(days_old)
+        #if self.traffic:
+        #    self.process_traffics()
+        #else:
+        #    LOGGER.warning("No traffic were found.")
         # REFRESH
         self.submissions = []
         self.comments = []
