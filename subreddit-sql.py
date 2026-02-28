@@ -1,9 +1,12 @@
 """Utility to save submissions, comments and awards from a subreddit into a sqlite database and keep it updated."""
+
 from argparse import ArgumentParser as arg_parser
 from datetime import datetime, UTC
 import sqlite3
 import logging
 from praw import Reddit
+from prawcore import Session
+from requests.status_codes import codes
 
 LOGGER = logging.getLogger(__file__)
 
@@ -22,6 +25,8 @@ class SubredditDump(object):
         self.submissions = []
         self.comments = []
         self._now = int(datetime.now(UTC).timestamp())
+        # add Too many requests to the retry cases
+        Session.RETRY_STATUSES.add(codes["too_many_requests"])
 
     def _init_sql(self) -> None:
         self.con.execute(
@@ -295,10 +300,10 @@ CREATE TABLE IF NOT EXISTS traffics(
                 LOGGER.warning("No comments were found.")
             else:
                 self.process_comments()
-        #self.fetch_recent_traffics(days_old)
-        #if self.traffic:
+        # self.fetch_recent_traffics(days_old)
+        # if self.traffic:
         #    self.process_traffics()
-        #else:
+        # else:
         #    LOGGER.warning("No traffic were found.")
         # REFRESH
         self.submissions = []
