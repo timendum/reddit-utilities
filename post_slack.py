@@ -45,7 +45,7 @@ def main(subreddit, hook_url):
         if submission.created_utc > created_utc:
             LOGGER.debug("OK: %i", submission.created_utc)
             new_created_utc = max(new_created_utc, submission.created_utc)
-            r = requests.post(
+            _ = requests.post(
                 hook_url,
                 data={
                     "payload": '{{"text": "New post: <https://redd.it/{}|{}> by {}"}}'.format(

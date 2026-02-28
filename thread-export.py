@@ -1,7 +1,7 @@
 from argparse import ArgumentParser as arg_parser
 import csv
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from io import StringIO
 
 from praw import Reddit
@@ -50,8 +50,8 @@ def to_csv(comments):
     for c in comments:
         writer.writerow([
             c.id, c.score, c.author, c.link_id,
-            datetime.utcfromtimestamp(c.created_utc), c.controversiality,
-            datetime.utcfromtimestamp(c.edited)
+            datetime.fromtimestamp(c.created_utc, timezone.utc), c.controversiality,
+            datetime.fromtimestamp(c.edited, timezone.utc)
             if c.edited else c.edited, (c.parent_id == c.link_id), c.stickied,
             c.distinguished, c.gilded,
             '' if c.parent_id == c.link_id  else c.parent_id[3:],
